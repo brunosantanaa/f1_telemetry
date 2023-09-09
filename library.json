@@ -1,0 +1,23 @@
+{
+  "name": "f1_2022",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": "f1, 2022, udp client f1",
+  "repository":
+  {
+    "type": "git",
+    "url": ""
+  },
+  "authors":
+  [
+    {
+      "name": "Bruno Santana",
+      "email": "bruno.sant.a"
+    }
+  ],
+  "license": "",
+  "dependencies": {
+  },
+  "frameworks": "*",
+  "platforms": "*"
+}
