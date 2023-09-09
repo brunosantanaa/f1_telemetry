@@ -227,4 +227,11 @@ typedef struct
 } f1_2022_pckt_car_status_t;
 #pragma pack(pop)
 
+f1_2022_err_t F1_2022_PacketParser(const void *data, size_t len);
+f1_2022_err_t F1_2022_GetTelemetry(f1_2022_pckt_telemetry_t *telemetry);
+f1_2022_err_t F1_2022_GetLap(f1_2022_pckt_lap_t *lap);
+f1_2022_err_t F1_2022_GetCarDamage(f1_2022_pckt_car_damage_t *damage);
+f1_2022_err_t F1_2022_GetCarMotion(f1_2022_pckt_car_motion_t *motion);
+f1_2022_err_t F1_2022_GetCarStatus(f1_2022_pckt_car_status_t *status);
+
 #endif // F1_2022_H
