@@ -13,6 +13,8 @@
 
 #include <string.h>
 
+#include "f1_telemetry.h"
+
 f1_telemetry_err_t F1_2023_GetTelemetry(const void *data, size_t len, f1_telemetry_pckt_telemetry_t *telemetry)
 {
   if (telemetry == NULL)

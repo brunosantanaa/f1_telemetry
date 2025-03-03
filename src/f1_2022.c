@@ -12,6 +12,8 @@
 
 #include <string.h>
 
+#include "f1_telemetry.h"
+
 static void ConvertHeaderF1_2022_To_2024(const f1_2022_header_t *src, f1_2024_header_t *dst);
 
 f1_telemetry_err_t F1_2022_GetTelemetry(const void *data, size_t len, f1_telemetry_pckt_telemetry_t *telemetry)

@@ -106,11 +106,4 @@ typedef struct __attribute__((packed))
 typedef f1_2023_car_status_t f1_2024_car_status_t;
 typedef f1_2023_pckt_car_status_t f1_2024_pckt_car_status_t;
 
-f1_telemetry_err_t F1_2024_GetTelemetry(const void *data, size_t len, f1_telemetry_pckt_telemetry_t *telemetry);
-f1_telemetry_err_t F1_2024_GetLap(const void *data, size_t len, f1_telemetry_pckt_lap_t *lap);
-f1_telemetry_err_t F1_2024_GetCarDamage(const void *data, size_t len, f1_telemetry_pckt_car_damage_t *damage);
-f1_telemetry_err_t F1_2024_GetCarMotion(const void *data, size_t len, f1_telemetry_pckt_car_motion_t *motion);
-f1_telemetry_err_t F1_2023_GetMotionEx(const void *data, size_t len, f1_telemetry_pckt_motion_t *motion);
-f1_telemetry_err_t F1_2024_GetCarStatus(const void *data, size_t len, f1_telemetry_pckt_car_status_t *status);
-
 #endif // F1_2024_H_

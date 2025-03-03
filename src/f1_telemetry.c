@@ -198,6 +198,7 @@ static f1_telemetry_err_t SetHeaderVersion(const void *data, size_t len)
     return F1_ERR_NO_DATA;
   }
   memcpy(&header.packetFormat, data, sizeof(uint16_t));
+
   if (header.packetFormat == 2022)
   {
     f1_2022_header_t header2022 = {0};
@@ -208,7 +209,6 @@ static f1_telemetry_err_t SetHeaderVersion(const void *data, size_t len)
   }
 
   memcpy(&header, data, sizeof(f1_telemetry_header_t));
-
   return F1_ERR_OK;
 }
 

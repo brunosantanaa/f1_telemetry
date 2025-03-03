@@ -213,10 +213,4 @@ typedef struct __attribute__((packed))
   f1_2022_car_status_t carStatusData[F1_NUM_CARS_22];
 } f1_2022_pckt_car_status_t;
 
-f1_telemetry_err_t F1_2022_GetTelemetry(const void *data, size_t len, f1_telemetry_pckt_telemetry_t *telemetry);
-f1_telemetry_err_t F1_2022_GetLap(const void *data, size_t len, f1_telemetry_pckt_lap_t *lap);
-f1_telemetry_err_t F1_2022_GetCarDamage(const void *data, size_t len, f1_telemetry_pckt_car_damage_t *damage);
-f1_telemetry_err_t F1_2022_GetCarMotion(const void *data, size_t len, f1_telemetry_pckt_car_motion_t *motion);
-f1_telemetry_err_t F1_2022_GetCarStatus(const void *data, size_t len, f1_telemetry_pckt_car_status_t *status);
-
 #endif // F1_2022_H

@@ -1,8 +1,6 @@
 #ifndef F1_TELEMETRY_COMMON_H_
 #define F1_TELEMETRY_COMMON_H_
 
-#include "f1_2024.h"
-
 #define F1_ERS_MAX_VALUE (4 * 1000 * 1000.0)
 #define F1_FULL_TANK (20)
 #define F1_NUM_CARS_22 (22)
@@ -16,13 +14,5 @@ typedef enum
     F1_ERR_INVALID_ARG,
     F1_ERR_FAIL = -1
 } f1_telemetry_err_t;
-
-typedef f1_2024_header_t f1_telemetry_header_t;
-typedef f1_2024_pckt_telemetry_t f1_telemetry_pckt_telemetry_t;
-typedef f1_2024_pckt_lap_t f1_telemetry_pckt_lap_t;
-typedef f1_2024_pckt_car_damage_t f1_telemetry_pckt_car_damage_t;
-typedef f1_2024_pckt_car_motion_t f1_telemetry_pckt_car_motion_t;
-typedef f1_2024_pckt_car_status_t f1_telemetry_pckt_car_status_t;
-typedef f1_2024_pckt_motion_t f1_telemetry_pckt_motion_t;
 
 #endif // F1_TELEMETRY_COMMON_H_
