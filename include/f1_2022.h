@@ -1,27 +1,13 @@
 #ifndef F1_2022_H
 #define F1_2022_H
 
-#include "stdint.h"
-#include "stdlib.h"
-#include "stdio.h"
-#include "string.h"
+#include <stdint.h>
+#include <stdbool.h>
+#include <stddef.h>
 
-#define F1_2022_ERS_MAX (4000000.0)
-#define F1_2022_FULL_TANK (20)
-#define F1_2022_NUM_CARS (22)
-#define F1_2022_NUM_TIRES (4)
+#include "f1_telemetry_common.h"
 
-typedef enum
-{
-  F1_2022_OK = 0,
-  F1_2022_NO_DATA,
-  F1_2022_ERR_NO_MEM = 0x101,
-  F1_2022_ERR_INVALID_ARG,
-  F1_2022_FAIL = -1
-} f1_2022_err_t;
-
-#pragma pack(push, 1)
-typedef struct
+typedef struct __attribute__((packed))
 {
   uint16_t packetFormat;
   uint8_t gameMajorVersion;
@@ -38,30 +24,30 @@ typedef struct
   uint8_t secondaryPlayerCarIndex;
 } f1_2022_header_t;
 
-typedef struct
+typedef struct __attribute__((packed))
 {
-  uint16_t speedKPH;                                  // Speed of car in kilometres per hour
-  float throttle;                                     // Amount of throttle applied (0.0 to 1.0)
-  float steer;                                        // Steering (-1.0 (full lock left) to 1.0 (full lock right))
-  float brake;                                        // Amount of brake applied (0.0 to 1.0)
-  uint8_t clutch;                                     // Amount of clutch applied (0 to 100)
-  int8_t gear;                                        // Gear selected (1-8, N=0, R=-1)
-  uint16_t engineRPM;                                 // Engine RPM
-  uint8_t drs;                                        // 0 = off, 1 = on
-  uint8_t revLightsPercent;                           // Rev lights indicator (percentage)
-  uint16_t revLightsBitValue;                         // Rev lights (bit 0 = leftmost LED, bit 14 = rightmost LED)
-  uint16_t brakesTemperature[F1_2022_NUM_TIRES];      // Brakes temperature (celsius)
-  uint8_t tyresSurfaceTemperature[F1_2022_NUM_TIRES]; // Tyres surface temperature (celsius)
-  uint8_t tyresInnerTemperature[F1_2022_NUM_TIRES];   // Tyres inner temperature (celsius)
-  uint16_t engineTemperature;                         // Engine temperature (celsius)
-  float tyresPressure[F1_2022_NUM_TIRES];             // Tyres pressure (PSI)
-  uint8_t surfaceType[F1_2022_NUM_TIRES];             // Driving surface, see appendices
+  uint16_t speedKPH;                               // Speed of car in kilometres per hour
+  float throttle;                                  // Amount of throttle applied (0.0 to 1.0)
+  float steer;                                     // Steering (-1.0 (full lock left) to 1.0 (full lock right))
+  float brake;                                     // Amount of brake applied (0.0 to 1.0)
+  uint8_t clutch;                                  // Amount of clutch applied (0 to 100)
+  int8_t gear;                                     // Gear selected (1-8, N=0, R=-1)
+  uint16_t engineRPM;                              // Engine RPM
+  uint8_t drs;                                     // 0 = off, 1 = on
+  uint8_t revLightsPercent;                        // Rev lights indicator (percentage)
+  uint16_t revLightsBitValue;                      // Rev lights (bit 0 = leftmost LED, bit 14 = rightmost LED)
+  uint16_t brakesTemperature[F1_NUM_TIRES_4];      // Brakes temperature (celsius)
+  uint8_t tyresSurfaceTemperature[F1_NUM_TIRES_4]; // Tyres surface temperature (celsius)
+  uint8_t tyresInnerTemperature[F1_NUM_TIRES_4];   // Tyres inner temperature (celsius)
+  uint16_t engineTemperature;                      // Engine temperature (celsius)
+  float tyresPressure[F1_NUM_TIRES_4];             // Tyres pressure (PSI)
+  uint8_t surfaceType[F1_NUM_TIRES_4];             // Driving surface, see appendices
 } f1_2022_telemetry_t;
 
-typedef struct
+typedef struct __attribute__((packed))
 {
   f1_2022_header_t header; // Header
-  f1_2022_telemetry_t carTelemetryData[F1_2022_NUM_CARS];
+  f1_2022_telemetry_t carTelemetryData[F1_NUM_CARS_22];
   uint8_t mfdPanelIndex;                // Index of MFD panel open - 255 = MFD closed
                                         // Single player, race – 0 = Car setup, 1 = Pits
                                         //  2 = Damage, 3 =  Engine, 4 = Temperatures
@@ -71,7 +57,7 @@ typedef struct
                                         // 0 if no gear suggested
 } f1_2022_pckt_telemetry_t;
 
-typedef struct
+typedef struct __attribute__((packed))
 {
   uint32_t lastLapTimeInMS;            // Last lap time in milliseconds
   uint32_t currentLapTimeInMS;         // Current time around the lap in milliseconds
@@ -104,42 +90,42 @@ typedef struct
   uint8_t pitStopShouldServePen;       // Whether the car should serve a penalty at this stop
 } f1_2022_lap_t;
 
-typedef struct
+typedef struct __attribute__((packed))
 {
-  f1_2022_header_t header;                 // Header
-  f1_2022_lap_t lapData[F1_2022_NUM_CARS]; // Lap data for all cars on track
+  f1_2022_header_t header;               // Header
+  f1_2022_lap_t lapData[F1_NUM_CARS_22]; // Lap data for all cars on track
 } f1_2022_pckt_lap_t;
 
 // Car Damage Packet
-typedef struct
+typedef struct __attribute__((packed))
 {
-  float tyresWear[F1_2022_NUM_TIRES];      // Tyre wear (percentage)
-  uint8_t tyresDamage[F1_2022_NUM_TIRES];  // Tyre damage (percentage)
-  uint8_t brakesDamage[F1_2022_NUM_TIRES]; // Brakes damage (percentage)
-  uint8_t frontLeftWingDamage;             // Front left wing damage (percentage)
-  uint8_t frontRightWingDamage;            // Front right wing damage (percentage)
-  uint8_t rearWingDamage;                  // Rear wing damage (percentage)
-  uint8_t floorDamage;                     // Floor damage (percentage)
-  uint8_t diffuserDamage;                  // Diffuser damage (percentage)
-  uint8_t sidepodDamage;                   // Sidepod damage (percentage)
-  uint8_t drsFault;                        // Indicator for DRS fault, 0 = OK, 1 = fault
-  uint8_t gearBoxDamage;                   // Gear box damage (percentage)
-  uint8_t engineDamage;                    // Engine damage (percentage)
-  uint8_t engineMGUHWear;                  // Engine wear MGU-H (percentage)
-  uint8_t engineESWear;                    // Engine wear ES (percentage)
-  uint8_t engineCEWear;                    // Engine wear CE (percentage)
-  uint8_t engineICEWear;                   // Engine wear ICE (percentage)
-  uint8_t engineMGUKWear;                  // Engine wear MGU-K (percentage)
-  uint8_t engineTCWear;                    // Engine wear TC (percentage)
+  float tyresWear[F1_NUM_TIRES_4];      // Tyre wear (percentage)
+  uint8_t tyresDamage[F1_NUM_TIRES_4];  // Tyre damage (percentage)
+  uint8_t brakesDamage[F1_NUM_TIRES_4]; // Brakes damage (percentage)
+  uint8_t frontLeftWingDamage;          // Front left wing damage (percentage)
+  uint8_t frontRightWingDamage;         // Front right wing damage (percentage)
+  uint8_t rearWingDamage;               // Rear wing damage (percentage)
+  uint8_t floorDamage;                  // Floor damage (percentage)
+  uint8_t diffuserDamage;               // Diffuser damage (percentage)
+  uint8_t sidepodDamage;                // Sidepod damage (percentage)
+  uint8_t drsFault;                     // Indicator for DRS fault, 0 = OK, 1 = fault
+  uint8_t gearBoxDamage;                // Gear box damage (percentage)
+  uint8_t engineDamage;                 // Engine damage (percentage)
+  uint8_t engineMGUHWear;               // Engine wear MGU-H (percentage)
+  uint8_t engineESWear;                 // Engine wear ES (percentage)
+  uint8_t engineCEWear;                 // Engine wear CE (percentage)
+  uint8_t engineICEWear;                // Engine wear ICE (percentage)
+  uint8_t engineMGUKWear;               // Engine wear MGU-K (percentage)
+  uint8_t engineTCWear;                 // Engine wear TC (percentage)
 } f1_2022_car_damage_t;
 
-typedef struct
+typedef struct __attribute__((packed))
 {
   f1_2022_header_t header; // Header
-  f1_2022_car_damage_t carDamageData[F1_2022_NUM_CARS];
+  f1_2022_car_damage_t carDamageData[F1_NUM_CARS_22];
 } f1_2022_pckt_car_damage_t;
 
-typedef struct
+typedef struct __attribute__((packed))
 {
   float worldPositionX;     // World space X position
   float worldPositionY;     // World space Y position
@@ -161,28 +147,29 @@ typedef struct
   float roll;               // Roll angle in radians
 } f1_2022_car_motion_t;
 
-typedef struct
+typedef struct __attribute__((packed))
 {
-  f1_2022_header_t header;                              // Header
-  f1_2022_car_motion_t carMotionData[F1_2022_NUM_CARS]; // Data for all cars on track
-                                                        // Extra player car ONLY data
-  float suspensionPosition[F1_2022_NUM_TIRES];          // Note: All wheel arrays have the following order:
-  float suspensionVelocity[F1_2022_NUM_TIRES];          // RL, RR, FL, FR
-  float suspensionAcceleration[F1_2022_NUM_TIRES];      // RL, RR, FL, FR
-  float wheelSpeed[F1_2022_NUM_TIRES];                  // Speed of each wheel
-  float wheelSlip[F1_2022_NUM_TIRES];                   // Slip ratio for each wheel
-  float localVelocityX;                                 // Velocity in local space
-  float localVelocityY;                                 // Velocity in local space
-  float localVelocityZ;                                 // Velocity in local space
-  float angularVelocityX;                               // Angular velocity x-component
-  float angularVelocityY;                               // Angular velocity y-component
-  float angularVelocityZ;                               // Angular velocity z-component
-  float angularAccelerationX;                           // Angular velocity x-component
-  float angularAccelerationY;                           // Angular velocity y-component
-  float angularAccelerationZ;                           // Angular velocity z-component
-  float frontWheelsAngle;                               // Current front wheels angle in radians
+  f1_2022_header_t header;                            // Header
+  f1_2022_car_motion_t carMotionData[F1_NUM_CARS_22]; // Data for all cars on track
+                                                      // Extra player car ONLY data
+  float suspensionPosition[F1_NUM_TIRES_4];           // Note: All wheel arrays have the following order:
+  float suspensionVelocity[F1_NUM_TIRES_4];           // RL, RR, FL, FR
+  float suspensionAcceleration[F1_NUM_TIRES_4];       // RL, RR, FL, FR
+  float wheelSpeed[F1_NUM_TIRES_4];                   // Speed of each wheel
+  float wheelSlip[F1_NUM_TIRES_4];                    // Slip ratio for each wheel
+  float localVelocityX;                               // Velocity in local space
+  float localVelocityY;                               // Velocity in local space
+  float localVelocityZ;                               // Velocity in local space
+  float angularVelocityX;                             // Angular velocity x-component
+  float angularVelocityY;                             // Angular velocity y-component
+  float angularVelocityZ;                             // Angular velocity z-component
+  float angularAccelerationX;                         // Angular velocity x-component
+  float angularAccelerationY;                         // Angular velocity y-component
+  float angularAccelerationZ;                         // Angular velocity z-component
+  float frontWheelsAngle;                             // Current front wheels angle in radians
 } f1_2022_pckt_car_motion_t;
-typedef struct
+
+typedef struct __attribute__((packed))
 {
   uint8_t tractionControl;        // Traction control - 0 = off, 1 = medium, 2 = full
   uint8_t antiLockBrakes;         // 0 (off) - 1 (on)
@@ -220,18 +207,16 @@ typedef struct
   uint8_t networkPaused;          // Whether the car is paused in a network game
 } f1_2022_car_status_t;
 
-typedef struct
+typedef struct __attribute__((packed))
 {
   f1_2022_header_t header; // Header
-  f1_2022_car_status_t carStatusData[F1_2022_NUM_CARS];
+  f1_2022_car_status_t carStatusData[F1_NUM_CARS_22];
 } f1_2022_pckt_car_status_t;
-#pragma pack(pop)
 
-f1_2022_err_t F1_2022_PacketParser(const void *data, size_t len);
-f1_2022_err_t F1_2022_GetTelemetry(f1_2022_pckt_telemetry_t *telemetry);
-f1_2022_err_t F1_2022_GetLap(f1_2022_pckt_lap_t *lap);
-f1_2022_err_t F1_2022_GetCarDamage(f1_2022_pckt_car_damage_t *damage);
-f1_2022_err_t F1_2022_GetCarMotion(f1_2022_pckt_car_motion_t *motion);
-f1_2022_err_t F1_2022_GetCarStatus(f1_2022_pckt_car_status_t *status);
+f1_telemetry_err_t F1_2022_GetTelemetry(const void *data, size_t len, f1_telemetry_pckt_telemetry_t *telemetry);
+f1_telemetry_err_t F1_2022_GetLap(const void *data, size_t len, f1_telemetry_pckt_lap_t *lap);
+f1_telemetry_err_t F1_2022_GetCarDamage(const void *data, size_t len, f1_telemetry_pckt_car_damage_t *damage);
+f1_telemetry_err_t F1_2022_GetCarMotion(const void *data, size_t len, f1_telemetry_pckt_car_motion_t *motion);
+f1_telemetry_err_t F1_2022_GetCarStatus(const void *data, size_t len, f1_telemetry_pckt_car_status_t *status);
 
 #endif // F1_2022_H
