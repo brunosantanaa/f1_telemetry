@@ -35,6 +35,7 @@ enum
 };
 
 static f1_telemetry_err_t SetHeaderVersion(const void *data, size_t len);
+static f1_telemetry_err_t ResetStructures(void);
 
 static f1_telemetry_header_t header = {0};
 static f1_telemetry_pckt_telemetry_t pckt_telemetry = {0};
@@ -50,12 +51,89 @@ f1_telemetry_err_t F1_TELEMETRY_PacketParser(const void *data, size_t len)
   {
     return err;
   }
+  ResetStructures();
   err = SetHeaderVersion(data, len);
   if (err != F1_ERR_OK)
   {
     return err;
   }
-
+  err = F1_ERR_FAIL;
+  switch (header.packetId)
+  {
+  case F1_TELEMETRY_PACKETCARTELEMETRYDATA:
+    if (header.packetFormat == 2022)
+    {
+      err = F1_2022_GetTelemetry(data, len, &pckt_telemetry);
+    }
+    else if (header.packetFormat == 2023)
+    {
+      err = F1_2023_GetTelemetry(data, len, &pckt_telemetry);
+    }
+    else if (header.packetFormat == 2024)
+    {
+      err = F1_2024_GetTelemetry(data, len, &pckt_telemetry);
+    }
+    break;
+  case F1_TELEMETRY_PACKETLAPDATA:
+    if (header.packetFormat == 2022)
+    {
+      err = F1_2022_GetLap(data, len, &pckt_lap);
+    }
+    else if (header.packetFormat == 2023)
+    {
+      err = F1_2023_GetLap(data, len, &pckt_lap);
+    }
+    else if (header.packetFormat == 2024)
+    {
+      err = F1_2024_GetLap(data, len, &pckt_lap);
+    }
+    break;
+  case F1_TELEMETRY_PACKETCARDAMAGEDATA:
+    if (header.packetFormat == 2022)
+    {
+      err = F1_2022_GetCarDamage(data, len, &pckt_car_damage);
+    }
+    else if (header.packetFormat == 2023)
+    {
+      err = F1_2023_GetCarDamage(data, len, &pckt_car_damage);
+    }
+    else if (header.packetFormat == 2024)
+    {
+      err = F1_2024_GetCarDamage(data, len, &pckt_car_damage);
+    }
+    break;
+  case F1_TELEMETRY_PACKETCARSTATUSDATA:
+    if (header.packetFormat == 2022)
+    {
+      err = F1_2022_GetCarStatus(data, len, &pckt_car_status);
+    }
+    else if (header.packetFormat == 2023)
+    {
+      err = F1_2023_GetCarStatus(data, len, &pckt_car_status);
+    }
+    else if (header.packetFormat == 2024)
+    {
+      err = F1_2024_GetCarStatus(data, len, &pckt_car_status);
+    }
+    break;
+  case F1_TELEMETRY_PACKETMOTIONDATA:
+    if (header.packetFormat == 2022)
+    {
+      err = F1_2022_GetCarMotion(data, len, &pckt_car_motion);
+    }
+    else if (header.packetFormat == 2023)
+    {
+      err = F1_2023_GetCarMotion(data, len, &pckt_car_motion);
+    }
+    else if (header.packetFormat == 2024)
+    {
+      err = F1_2024_GetCarMotion(data, len, &pckt_car_motion);
+    }
+    break;
+  default:
+    err = F1_ERR_NO_DATA;
+    break;
+  }
   return err;
 }
 
@@ -131,5 +209,16 @@ static f1_telemetry_err_t SetHeaderVersion(const void *data, size_t len)
 
   memcpy(&header, data, sizeof(f1_telemetry_header_t));
 
+  return F1_ERR_OK;
+}
+
+static f1_telemetry_err_t ResetStructures(void)
+{
+  memset(&header, 0, sizeof(f1_telemetry_header_t));
+  memset(&pckt_telemetry, 0, sizeof(f1_telemetry_pckt_telemetry_t));
+  memset(&pckt_lap, 0, sizeof(f1_telemetry_pckt_lap_t));
+  memset(&pckt_car_damage, 0, sizeof(f1_telemetry_pckt_car_damage_t));
+  memset(&pckt_car_motion, 0, sizeof(f1_telemetry_pckt_car_motion_t));
+  memset(&pckt_car_status, 0, sizeof(f1_telemetry_pckt_car_status_t));
   return F1_ERR_OK;
 }
