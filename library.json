@@ -1,23 +1,20 @@
 {
-  "name": "f1_2022",
+  "name": "f1_telemetry",
   "version": "0.0.1",
   "description": "",
-  "keywords": "f1, 2022, udp client f1",
-  "repository":
-  {
+  "keywords": "f1, 2022, 2023, 2024, telemetry, udp client f1",
+  "repository": {
     "type": "git",
     "url": ""
   },
-  "authors":
-  [
+  "authors": [
     {
       "name": "Bruno Santana",
       "email": "bruno.sant.a"
     }
   ],
   "license": "",
-  "dependencies": {
-  },
+  "dependencies": {},
   "frameworks": "*",
   "platforms": "*"
 }
